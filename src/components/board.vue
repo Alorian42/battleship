@@ -148,9 +148,106 @@
         } 
 
         const corners = envState.rightTop && envState.leftTop && envState.rightBottom && envState.leftBottom;
+        if (!corners || (this.freeShips[1] === 0 && this.freeShips[2] === 0 && this.freeShips[3] === 0 && this.freeShips[4] === 0)) {
+          return false;
+        }
 
-        return  envState.right && envState.left && envState.top && envState.bottom && 
-          corners;
+        const count = (() =>  {
+          let row = rowNumber;
+          let ind = index;
+          let counts = [];
+
+          let count = 1;
+          let tempRow = row - 1;
+          while (tempRow >= 0) {
+            if (this.matrix[tempRow][ind] === 4) {
+              count++;
+            }
+            else {
+              break;
+            }
+            tempRow--;
+          }
+          counts.push(count);
+          if (count !== 1 && count <= 4) {
+            return count;
+          } if (count > 4) {
+            return false;
+          }
+
+          count = 1;
+          tempRow = row + 1;
+          while (tempRow <= 9) {
+            if (this.matrix[tempRow][ind] === 4) {
+              count++;
+            }
+            else {
+              break;
+            }
+            tempRow++;
+          }
+          counts.push(count);
+          if (count !== 1 && count <= 4) {
+            return count;
+          } if (count > 4) {
+            return false;
+          }
+
+          count = 1;
+          let tempInd = ind - 1;
+          while (tempInd >= 0) {
+            if (this.matrix[row][tempInd] === 4) {
+              count++;
+            }
+            else {
+              break;
+            }
+            tempInd--;
+          }
+          counts.push(count);
+          if (count !== 1 && count <= 4) {
+            return count;
+          }
+          else if (count > 4) {
+            return false;
+          }
+
+          count = 1;
+          tempInd = ind + 1;
+          while (tempInd <= 9) {
+            if (this.matrix[row][tempInd] === 4) {
+              count++;
+            }
+            else {
+              break;
+            }
+            tempInd++;
+          }
+          counts.push(count);
+          if (count !== 1 && count <= 4) {
+            return count;
+          } if (count > 4) {
+            return false;
+          }
+
+          if (counts.indexOf(1) === -1) {
+            return false;
+          }
+          else {
+            return 1;
+          }
+        })();
+        console.log(count > 0);
+        
+        if (count && this.freeShips[count] > 0) {
+          this.freeShips[count]--;
+          if (count > 1) {
+            this.freeShips[count - 1]++;
+          }
+          return true;
+        }
+
+        return false;
       }
     },
     computed: {
