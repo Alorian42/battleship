@@ -1,12 +1,13 @@
 <template lang="html">
   <div 
-    class="square noselect" 
+    class="square" 
     :class="{
       'empty': state === 0,
       'missed': state === 1,
       'part-destroyed': state === 2,
       'full-destroyed': state === 3,
       'your-ship': state === 4,
+      'noselect': (state === 4 && mode === 0) || ((state === 2) || (state === 3) && mode === 1)
     }"
     @click="handleClick"
   >
@@ -53,6 +54,9 @@
         if (this.mode === 0 && this.state === 0) {
           this.$emit('build');
         }
+        else if (this.mode === 1 && this.state === 4) {
+          this.$emit('destroy');
+        }
       }
     },
     computed: {
@@ -70,8 +74,7 @@
 		-khtml-user-select: none; /* Konqueror HTML */
 		-moz-user-select: none; /* Firefox */
 		-ms-user-select: none; /* Internet Explorer/Edge */
-		user-select: none; /* Non-prefixed version, currently
-																										                                  supported by Chrome and Opera */
+		user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
 	}
 
 	.square {

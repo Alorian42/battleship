@@ -4,6 +4,7 @@
       <square 
         v-for="(square, index) in row" 
         @build="handleBuild(rowNumber, index)"
+        @destroy="handleDestroy(rowNumber, index)"
         :state="square"
         :mode="mode"
       ></square>
@@ -59,6 +60,15 @@
         if (validation) {
           this.$emit('change', action);
         }
+      },
+      handleDestroy: function(rowNumber, index) {
+        const action = {
+          rowNumber,
+          index,
+          value: 2
+        };
+
+        this.$emit('change', action);
       },
       validBuild: function({rowNumber, index}) {
         const envState = {
